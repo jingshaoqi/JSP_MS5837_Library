@@ -87,6 +87,9 @@ public:
 	 */
 	float altitude();
 
+	/** get sensor verion for check sensor version.
+	 */
+	uint8_t getVersion();
 private:
 
 	//This stores the requested i2c port
@@ -97,6 +100,7 @@ private:
 	int32_t TEMP;
 	int32_t P;
 	uint8_t _model;
+	uint8_t _version;
 
 	float fluidDensity;
 
