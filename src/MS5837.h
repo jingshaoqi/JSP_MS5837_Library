@@ -97,8 +97,8 @@ private:
 
 	uint16_t C[8];
 	uint32_t D1_pres, D2_temp;
-	int32_t TEMP;
-	int32_t P;
+	int64_t TEMP;
+	int64_t P;
 	uint8_t _model;
 	uint8_t _version;
 
