@@ -22,7 +22,15 @@ const uint8_t MS5837_30BA26 = 0x1A; // Sensor version: From MS5837_30BA datashee
 const uint8_t MS5839_02BA36 = 0x24; // Sensor version: From MS5839_02BA36 datasheet Version PROM Word 0
 
 MS5837::MS5837() {
+	_i2cPort = nullptr;
 	fluidDensity = 1029;
+	memset(C,0, sizeof(C));
+	D1_pres = 0;
+	D2_temp = 0;
+	TEMP = 0;
+	P = 0;
+	_model = MS5837_30BA;
+	_version = MS5837_30BA26;	
 }
 
 bool MS5837::begin(TwoWire &wirePort) {
