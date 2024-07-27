@@ -148,12 +148,12 @@ void MS5837::calculate() {
 	// Given C1-C6 and D1, D2, calculated TEMP and P
 	// Do conversion first and then second order temp compensation
 
-	int32_t dT = 0;
+	int64_t dT = 0;
 	int64_t SENS = 0;
 	int64_t OFF = 0;
-	int32_t SENSi = 0;
-	int32_t OFFi = 0;
-	int32_t Ti = 0;
+	int64_t SENSi = 0;
+	int64_t OFFi = 0;
+	int64_t Ti = 0;
 	int64_t OFF2 = 0;
 	int64_t SENS2 = 0;
 
