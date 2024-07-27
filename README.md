@@ -54,6 +54,10 @@ float depth();
  */
 float altitude();
 
+/** get sensor verion for check sensor version.
+ */
+uint8_t getVersion();
+
 ```
 
 # Versions
@@ -62,4 +66,7 @@ float altitude();
 
 # Reference
 
+You can find the MS5837 MS5849 on https://www.te.com/en/products/sensors.html
+MS583730BA01 https://www.te.com/en/product-MS583730BA01-50.html
 You can find the [MS5837-30BA datasheet here](http://www.mouser.com/ds/2/418/MS5837-30BA-736494.pdf).
+https://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Data+Sheet%7FMS5837-30BA%7FC5%7Fpdf%7FEnglish%7FENG_DS_MS5837-30BA_C5.pdf%7FMS583730BA01-50

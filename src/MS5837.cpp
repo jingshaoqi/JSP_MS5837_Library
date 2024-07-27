@@ -19,6 +19,7 @@ const uint8_t MS5837::MS5837_UNRECOGNISED = 255;
 const uint8_t MS5837_02BA01 = 0x00; // Sensor version: From MS5837_02BA datasheet Version PROM Word 0
 const uint8_t MS5837_02BA21 = 0x15; // Sensor version: From MS5837_02BA datasheet Version PROM Word 0
 const uint8_t MS5837_30BA26 = 0x1A; // Sensor version: From MS5837_30BA datasheet Version PROM Word 0
+const uint8_t MS5839_02BA36 = 0x24; // Sensor version: From MS5839_02BA36 datasheet Version PROM Word 0
 
 MS5837::MS5837() {
 	fluidDensity = 1029;
