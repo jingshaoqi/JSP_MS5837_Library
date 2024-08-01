@@ -111,6 +111,8 @@ private:
 	void calculate();
 
 	uint8_t crc4(uint16_t n_prom[]);
+
+	int read_value(uint32_t *ptr);
 };
 
 #endif

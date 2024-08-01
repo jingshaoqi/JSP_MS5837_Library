@@ -148,9 +148,9 @@ int MS5837::read() {
 		return -1;
 	}
 	D1_pres = 0;
-	D1_pres = _i2cPort->read();
-	D1_pres = (D1_pres << 8) | _i2cPort->read();
-	D1_pres = (D1_pres << 8) | _i2cPort->read();
+	if(read_value(&D1_pres) == -1){
+		return -1;
+	}
 
 	// Request D2 conversion
 	_i2cPort->beginTransmission(MS5837_ADDR);
@@ -174,9 +174,9 @@ int MS5837::read() {
 		return -1;
 	}
 	D2_temp = 0;
-	D2_temp = _i2cPort->read();
-	D2_temp = (D2_temp << 8) | _i2cPort->read();
-	D2_temp = (D2_temp << 8) | _i2cPort->read();
+	if(read_value(&D2_temp) == -1){
+		return -1;
+	}
 
 	calculate();
 	return 0;
@@ -298,4 +298,29 @@ uint8_t MS5837::crc4(uint16_t n_prom[]) {
 	n_rem = ((n_rem >> 12) & 0x000F);
 
 	return n_rem ^ 0x00;
+}
+
+int MS5837::read_value(uint32_t *ptr){
+	uint32_t v = 0;
+	int nRes = 0;
+	nRes = _i2cPort->read();
+	if(nRes == -1){
+		return -1;
+	}
+	v = nRes;
+
+	nRes = _i2cPort->read();
+	if(nRes == -1){
+		return -1;
+	}
+	v = (v << 8) | nRes;
+	
+
+	nRes = _i2cPort->read();
+	if(nRes == -1){
+		return -1;
+	}
+	v = (v << 8) | nRes;
+	*ptr= v;
+	return 0;
 }
