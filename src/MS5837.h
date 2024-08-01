@@ -66,9 +66,10 @@ public:
 	 */
 	void setFluidDensity(float density);
 
-	/** The read from I2C takes up to 40 ms, so use sparingly is possible.
+	/** The read from I2C takes up to 50 ms, so use sparingly is possible.
+	 * if it's ok, will return 0,otherwize will return -1
 	 */
-	void read();
+	int read();
 
 	/** Pressure returned in mbar or mbar*conversion rate.
 	 */
