@@ -44,11 +44,12 @@ bool MS5837::init(TwoWire &wirePort) {
 	uint8_t rt = 0;
 	// Reset the MS5837, per datasheet
 	_i2cPort->beginTransmission(MS5837_ADDR);
-	wt = _i2cPort->write(MS5837_RESET);
-	_i2cPort->endTransmission();
-	if(wt != 1){
+	wt = _i2cPort->write(MS5837_RESET);	
+	rt = _i2cPort->endTransmission();
+	if(wt != 1 || rt != 0){
 		return false;
 	}
+	
 
 	// Wait for reset to complete
 	delay(10);
@@ -56,17 +57,27 @@ bool MS5837::init(TwoWire &wirePort) {
 	// Read calibration values and CRC
 	for ( uint8_t i = 0 ; i < 7 ; i++ ) {
 		_i2cPort->beginTransmission(MS5837_ADDR);
-		wt = _i2cPort->write(MS5837_PROM_READ+i*2);
-		_i2cPort->endTransmission();
-		if(wt != 1){
+		wt = _i2cPort->write(MS5837_PROM_READ+i*2);		
+		rt = _i2cPort->endTransmission();
+		if(wt != 1 || rt != 0){
 			return false;
-		}
+		}		
 
 		rt = _i2cPort->requestFrom(MS5837_ADDR,(uint8_t)2);
 		if(rt != 2){
 			return false;
 		}
-		C[i] = (_i2cPort->read() << 8) | _i2cPort->read();
+		
+		int nRes = _i2cPort->read();
+		if(nRes == -1){
+			return false;
+		}
+		C[i] = nRes;
+		nRes = _i2cPort->read();
+		if(nRes == -1){
+			return false;
+		}
+		C[i] = ((C[i] << 8) | (nRes & 0xFF));
 	}
 
 	// Verify that data is correct with CRC
@@ -126,55 +137,55 @@ int MS5837::read() {
 		return -1;
 	}
 	size_t wt = 0;
+	uint8_t rt = 0;
 	// Request D1 conversion
 	_i2cPort->beginTransmission(MS5837_ADDR);
 	wt = _i2cPort->write(MS5837_CONVERT_D1_8192);
-	_i2cPort->endTransmission();
-	if(wt != 1){
+	rt = _i2cPort->endTransmission();
+	if(wt!=1 || rt!=0){
 		return -1;
-	}
+	}	
 
 	delay(25); // Max conversion time per datasheet
 
 	_i2cPort->beginTransmission(MS5837_ADDR);
 	wt = _i2cPort->write(MS5837_ADC_READ);
-	_i2cPort->endTransmission();
-	if(wt != 1){
+	rt = _i2cPort->endTransmission();
+	if(wt!=1 || rt!=0){
 		return -1;
 	}
-	uint8_t rt = 0;
 	rt = _i2cPort->requestFrom(MS5837_ADDR,(uint8_t)3);
 	if(rt != 3){
 		return -1;
 	}
 	D1_pres = 0;
-	if(read_value(&D1_pres) == -1){
+	if(read_value(&D1_pres) != 0){
 		return -1;
 	}
 
 	// Request D2 conversion
 	_i2cPort->beginTransmission(MS5837_ADDR);
 	wt = _i2cPort->write(MS5837_CONVERT_D2_8192);
-	_i2cPort->endTransmission();
-	if(wt != 1){
+	rt = _i2cPort->endTransmission();
+	if(wt != 1 || rt != 0){
 		return -1;
-	}
+	}	
 
 	delay(25); // Max conversion time per datasheet
 
 	_i2cPort->beginTransmission(MS5837_ADDR);
 	wt = _i2cPort->write(MS5837_ADC_READ);
-	_i2cPort->endTransmission();
-	if(wt != 1){
+	rt = _i2cPort->endTransmission();
+	if(wt != 1 || rt != 0){
 		return -1;
-	}
+	}	
 
 	rt = _i2cPort->requestFrom(MS5837_ADDR,(uint8_t)3);
 	if(rt != 3){
 		return -1;
 	}
 	D2_temp = 0;
-	if(read_value(&D2_temp) == -1){
+	if(read_value(&D2_temp) != 0){
 		return -1;
 	}
 
