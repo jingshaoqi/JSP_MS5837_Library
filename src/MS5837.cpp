@@ -68,7 +68,9 @@ int MS5837::init(TwoWire &wirePort) {
 			return -3;
 		}
 		
-		C[i] = (_i2cPort->read() << 8) | _i2cPort->read();	
+		C[i] = _i2cPort->read() & 0xFF;
+		C[i] = (C[i] << 8) | (_i2cPort->read() & 0xFF);
+		
 	}
 
 	// Verify that data is correct with CRC
@@ -304,9 +306,9 @@ uint8_t MS5837::crc4(uint16_t n_prom[]) {
 
 int MS5837::read_value(uint32_t *ptr){
 	uint32_t v = 0;
-	v = _i2cPort->read();
-	v = (v << 8) | _i2cPort->read();
-	v = (v << 8) | _i2cPort->read();	
+	v = (_i2cPort->read() & 0xFF);
+	v = (v << 8) | (_i2cPort->read() & 0xFF);
+	v = (v << 8) | (_i2cPort->read() & 0xFF);
 	*ptr= v;
 	return 0;
 }
