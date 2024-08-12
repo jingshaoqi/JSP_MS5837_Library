@@ -68,16 +68,8 @@ int MS5837::init(TwoWire &wirePort) {
 			return -3;
 		}
 		
-		int nRes = _i2cPort->read();
-		if(nRes == -1){
-			return -4;
-		}
-		C[i] = nRes;
-		nRes = _i2cPort->read();
-		if(nRes == -1){
-			return -5;
-		}
-		C[i] = ((C[i] << 8) | (nRes & 0xFF));
+		C[i] = (_i2cPort->read() & 0xFF);
+		C[i] |= (C[i] << 8)| (_i2cPort->read() & 0xFF);		
 	}
 
 	// Verify that data is correct with CRC
@@ -313,25 +305,15 @@ uint8_t MS5837::crc4(uint16_t n_prom[]) {
 
 int MS5837::read_value(uint32_t *ptr){
 	uint32_t v = 0;
-	int nRes = 0;
-	nRes = _i2cPort->read();
-	if(nRes == -1){
-		return -1;
-	}
-	v = nRes;
-
-	nRes = _i2cPort->read();
-	if(nRes == -1){
-		return -1;
-	}
-	v = (v << 8) | nRes;
-	
-
-	nRes = _i2cPort->read();
-	if(nRes == -1){
-		return -1;
-	}
-	v = (v << 8) | nRes;
+	int n1 = 0;
+	int n2 = 0;
+	int n3 = 0;
+	n1 = _i2cPort->read();
+	n2 = _i2cPort->read();
+	n3 = _i2cPort->read();
+	v = (n1 & 0xFF) << 16;
+	v |= (n2 & 0xFF) << 8;
+	v |= (n3 & 0xFF);	
 	*ptr= v;
 	return 0;
 }
