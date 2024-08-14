@@ -40,6 +40,7 @@ int MS5837::begin(TwoWire &wirePort) {
 int MS5837::init(TwoWire &wirePort) {
 	_i2cPort = &wirePort; //Grab which port the user wants us to use
 	_i2cPort->begin();
+	_i2cPort->setWireTimeout(50000,true);
 	size_t wt = 0;
 	uint8_t rt = 0;
 	// Reset the MS5837, per datasheet
